@@ -11,15 +11,15 @@ De même, on utilisera aussi l'api du site [WhatIsMyIp](https://www.whatismyip.c
 
 ## __*__Partie 2 : Horaires de trains et informations en gare__*__
 
-L'objectif de cette partie est d'intégrer une interface permetttant de rechercher une gare en fonction de critères définissables par l'internaute. L'affichage permettra d'obtenir le maximum d'informations sur la gare recherchée.
+L'objectif de cette partie est d'intégrer une interface permettant de rechercher une gare en fonction de critères définissables par l'internaute. L'affichage permettra d'obtenir le maximum d'informations sur la gare recherchée.
 
 ## __*__Partie 3 : Stockage__*__
 
-Le site devra en outre stocker diverses informations coté serveur, notamment des statistiques sur les recherches de gare, les visites du site, et un historique des gares consultées. On pourra utiliser un cookie pour stocker coté client la derniere gare consultée lors de la précédente visite de l'utilisateur.
+Le site devra en outre stocker diverses informations côté serveur, notamment des statistiques sur les recherches de gares, les visites du site, et un historique des gares consultées. On pourra utiliser un cookie pour stocker côté client la dernière gare consultée lors de la précédente visite de l'utilisateur.
 
 ## __*__Partie 4 : Compléments__*__
 
-Le site sera agrémenté d'un dossier de photos, parmi lesquelles une sera affiché aléatoirement à chaque refresh de page.
+Le site sera agrémenté d'un dossier de photos, parmi lesquelles une sera affichée aléatoirement à chaque rafraichissement de page.
 Le site intégrera aussi un système permettant de choisir entre le mode clair et sombre.
 
 # __*__Auteurs :__*__
