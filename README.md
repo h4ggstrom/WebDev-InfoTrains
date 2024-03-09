@@ -23,5 +23,6 @@ Le site sera agrémenté d'un dossier de photos, parmi lesquelles une sera affic
 Le site intégrera aussi un système permettant de choisir entre le mode clair et sombre.
 
 # __*__Auteurs :__*__
+
 - DE ANGELIS Robin, L2-Informatique, <robin.de-angelis@etu.cyu.fr>
 - GALLET Louis, L2 Double licence Mathématiques Informatique, <louis.gallet@etu.cyu.fr>
