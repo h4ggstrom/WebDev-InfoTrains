@@ -9,29 +9,30 @@
     <h1>Astronomy Picture of The Day - Developer Page</h1>
 
     <div id="apodImageContainer">
-        <?php
-            // Remplacez 'YOUR_NASA_API_KEY' par votre propre clé API de la NASA
-            $apiKey = 'ViJkzG7JONaWOcpDw4QYjGZ8pbNCPbGIzhQ5ypSr';
-            $apodApiUrl = "https://api.nasa.gov/planetary/apod?api_key={$apiKey}&date=2024-02-23";
+    <?php
+    $apiKey = 'ViJkzG7JONaWOcpDw4QYjGZ8pbNCPbGIzhQ5ypSr';
+    $currentDate = date('Y-m-d');
+    $apodApiUrl = "https://api.nasa.gov/planetary/apod?api_key={$apiKey}&date={$currentDate}";
 
-            try {
-                $apodResponse = file_get_contents($apodApiUrl);
-                $apodData = json_decode($apodResponse);
+    try {
+        $apodResponse = file_get_contents($apodApiUrl);
+        $apodData = json_decode($apodResponse);
 
-                if ($apodData->media_type === 'image') {
-                    // Si c'est une image, l'afficher
-                    echo "<img src=\"{$apodData->url}\" alt=\"APOD\">";
-                } elseif ($apodData->media_type === 'video') {
-                    // Si c'est une vidéo, utiliser la balise vidéo HTML5
-                    echo "<video width=\"100%\" height=\"auto\" controls><source src=\"{$apodData->url}\" type=\"video/mp4\"></video>";
-                } else {
-                    echo 'Type de média non pris en charge.';
-                }
-            } catch (Exception $e) {
-                echo 'Erreur lors du chargement des données APOD: ' . $e->getMessage();
-            }
-        ?>
+        if ($apodData->media_type === 'image') {
+            // Si c'est une image, l'afficher
+            echo "<img src=\"{$apodData->url}\" alt=\"APOD\">";
+        } elseif ($apodData->media_type === 'video') {
+            // Si c'est une vidéo, utiliser la balise vidéo HTML5
+            echo "<video width=\"100%\" height=\"auto\" controls><source src=\"{$apodData->url}\" type=\"video/mp4\"></video>";
+        } else {
+            echo 'Type de média non pris en charge.';
+        }
+    } catch (Exception $e) {
+        echo 'Erreur lors du chargement des données APOD: ' . $e->getMessage();
+    }
+    ?>
     </div>
+
 
     <hr>
 

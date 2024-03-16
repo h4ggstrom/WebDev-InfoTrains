@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Tech</title>
-</head>
-<body>
+<?php 
+	declare(strict_types=1);
+	$title = "UJR Acceuil";
+	$h1 = "projet php";
+	require_once "include/fonctions.inc.php";
+	require "include/header.inc.php";
+	require_once "include/util.php";
+	$navigateur = get_navigateur();
+?>
+<main>
 
-<div id="apodImageContainer">
-    <?php
-    $apodUrl = 'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2024-02-23';
-    $apodData = json_decode(file_get_contents($apodUrl), true);
-    $imageUrl = $apodData['url'];
-    echo '<img src="' . $imageUrl . '" alt="APOD Image of the Day">';
-    ?>
-</div>
 
-</body>
-</html>
+</main>
+
+<?php
+
+	require "include/footer.inc.php";
+
+?>
