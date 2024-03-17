@@ -251,7 +251,7 @@ footer a:visited {
     font-size: 16px;
     text-align: left;
     text-decoration: none;
-    background-color: #3498db;
+    background-color: #CC0000;
     color: #fff;
     border-radius: 5px;
     transition: background-color 0.3s ease;
@@ -259,7 +259,7 @@ footer a:visited {
 }
 
 .lien-bouton:hover {
-    background-color: #2980b9;
+    background-color: #CC0000;
 }
 
 .lang {

@@ -1,80 +1,64 @@
+<?php
+/**
+ * Gère le choix du thème (mode jour/nuit) sur le site web.
+ *
+ * Cette fonction utilise des cookies pour mémoriser la préférence de l'utilisateur
+ * et inclut également le fichier CSS correspondant au thème sélectionné.
+ *
+ * @return string Le mode actuel sélectionné ('jour' ou 'nuit').
+ */
+function gestionTheme() {
+    // Vérification si le mode a été choisi
+    if(isset($_GET['mode'])) {
+        // Mode nuit choisi
+        if($_GET['mode'] === 'nuit') {
+            // Définition du cookie pour le mode nuit
+            setcookie('mode', 'nuit', time() + (86400 * 30), "/");
+            return 'nuit';
+        }
+        // Mode jour choisi
+        else if($_GET['mode'] === 'jour') {
+            // Définition du cookie pour le mode jour
+            setcookie('mode', 'jour', time() + (86400 * 30), "/");
+            return 'jour';
+        }
+    }
+
+    // Vérification si le cookie existe
+    if(isset($_COOKIE['mode'])) {
+        // Vérification de la valeur du cookie pour déterminer le mode actuel
+        return ($_COOKIE['mode'] === 'nuit') ? 'nuit' : 'jour';
+    }
+
+    // Mode par défaut : jour
+    return 'jour';
+}
+
+// Appel de la fonction pour gérer le choix de thème
+$mode = gestionTheme();
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Page - APOD and IP Location</title>
+    <title>Page avec choix de la charte graphique</title>
+    <!-- Inclusion du CSS selon le mode sélectionné -->
+    <link rel="stylesheet" type="text/css" href="<?php echo ($mode === 'jour') ? 'css/styles.css' : 'css/styles_alternatif.css'; ?>">
 </head>
 <body>
-    <h1>Astronomy Picture of The Day - Developer Page</h1>
-
-    <div id="apodImageContainer">
-        <?php
-            // Remplacez 'YOUR_NASA_API_KEY' par votre propre clé API de la NASA
-            $apiKey = 'ViJkzG7JONaWOcpDw4QYjGZ8pbNCPbGIzhQ5ypSr';
-            $apodApiUrl = "https://api.nasa.gov/planetary/apod?api_key={$apiKey}&date=2024-02-23";
-
-            try {
-                $apodResponse = file_get_contents($apodApiUrl);
-                $apodData = json_decode($apodResponse);
-
-                if ($apodData->media_type === 'image') {
-                    // Si c'est une image, l'afficher
-                    echo "<img src=\"{$apodData->url}\" alt=\"APOD\">";
-                } elseif ($apodData->media_type === 'video') {
-                    // Si c'est une vidéo, utiliser la balise vidéo HTML5
-                    echo "<video width=\"100%\" height=\"auto\" controls><source src=\"{$apodData->url}\" type=\"video/mp4\"></video>";
-                } else {
-                    echo 'Type de média non pris en charge.';
-                }
-            } catch (Exception $e) {
-                echo 'Erreur lors du chargement des données APOD: ' . $e->getMessage();
-            }
-        ?>
-    </div>
-
-    <hr>
-
-    <h2>Localisation par adresse IP</h2>
-    <div id="ipLocationContainer">
-        <?php
-            // Fonction pour récupérer l'adresse IP du visiteur côté serveur
-            function getVisitorIP() {
-                if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-                    $ip = $_SERVER['HTTP_CLIENT_IP'];
-                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                    $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                } else {
-                    $ip = $_SERVER['REMOTE_ADDR'];
-                }
-                return $ip;
-            }
-
-            $visitorIP = getVisitorIP();
-            $ipLocationUrl = "http://www.geoplugin.net/xml.gp?ip={$visitorIP}";
-
-            try {
-                $ipLocationResponse = file_get_contents($ipLocationUrl);
-                $xml = simplexml_load_string($ipLocationResponse);
-
-                $city = $xml->geoplugin_city;
-                $region = $xml->geoplugin_region;
-                $country = $xml->geoplugin_countryName;
-                $postalCode = $xml->geoplugin_areaCode;
-                $latitude = $xml->geoplugin_latitude;
-                $longitude = $xml->geoplugin_longitude;
-
-                $locationInfo = "Vous êtes situé à ";
-                if (!empty($city)) {
-                    $locationInfo .= "{$city}, ";
-                }
-                $locationInfo .= "{$region}, {$country}, {$postalCode}. Coordonnées géographiques : Latitude {$latitude}, Longitude {$longitude}.";
-
-                echo "<p>{$locationInfo}</p>";
-            } catch (Exception $e) {
-                echo 'Erreur lors du chargement de la localisation par adresse IP: ' . $e->getMessage();
-            }
-        ?>
-    </div>
+    <header>
+        <h1>Mon site</h1>
+    </header>
+    <nav>
+        <!-- Liens pour choisir le mode -->
+        <a href="?mode=jour"><img src="icone_jour.png" alt="Mode jour"></a>
+        <a href="?mode=nuit"><img src="icone_nuit.png" alt="Mode nuit"></a>
+    </nav>
+    <main>
+        <!-- Contenu principal de la page -->
+    </main>
+    <footer>
+        <!-- Pied de page -->
+    </footer>
 </body>
 </html>
