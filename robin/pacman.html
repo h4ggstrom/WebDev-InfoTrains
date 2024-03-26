@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Simplifié</title>
+    <style>
+        .pacman {
+            width: 20px;
+            height: 20px;
+            background-color: yellow;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            transition: left 0.1s, top 0.1s;
+        }
+        .ghost {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+            transition: left 0.5s, top 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="pacman"></div>
+    <div class="ghost"></div>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            const pacman = document.querySelector('.pacman');
+            const ghost = document.querySelector('.ghost');
+
+            let pacman_x = parseInt(pacman.style.left) || 0;
+            let pacman_y = parseInt(pacman.style.top) || 0;
+            let ghost_x = parseInt(ghost.style.left) || 100;
+            let ghost_y = parseInt(ghost.style.top) || 100;
+
+            switch (event.key) {
+                case 'ArrowLeft':
+                    pacman_x -= 10;
+                    break;
+                case 'ArrowRight':
+                    pacman_x += 10;
+                    break;
+                case 'ArrowUp':
+                    pacman_y -= 10;
+                    break;
+                case 'ArrowDown':
+                    pacman_y += 10;
+                    break;
+            }
+
+            pacman.style.left = pacman_x + 'px';
+            pacman.style.top = pacman_y + 'px';
+
+            // Mouvement aléatoire du fantôme
+            const directions = ['left', 'right', 'up', 'down'];
+            const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+            switch (randomDirection) {
+                case 'left':
+                    ghost_x -= 10;
+                    break;
+                case 'right':
+                    ghost_x += 10;
+                    break;
+                case 'up':
+                    ghost_y -= 10;
+                    break;
+                case 'down':
+                    ghost_y += 10;
+                    break;
+            }
+
+            ghost.style.left = ghost_x + 'px';
+            ghost.style.top = ghost_y + 'px';
+        });
+    </script>
+</body>
+</html>
