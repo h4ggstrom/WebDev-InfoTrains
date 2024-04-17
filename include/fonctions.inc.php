@@ -5,7 +5,8 @@
  * 
  * @return string Adresse IP du visiteur.
  */
-function getVisitorIP(): string {
+function getVisitorIP(): string 
+{
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         return $_SERVER['HTTP_CLIENT_IP'];
     } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -20,7 +21,8 @@ function getVisitorIP(): string {
  * 
  * @return string Contenu HTML de l'image ou de la vidéo.
  */
-function fetchAPOD(): string {
+function fetchAPOD(): string 
+{
     $apiKey = 'ViJkzG7JONaWOcpDw4QYjGZ8pbNCPbGIzhQ5ypSr';
     $currentDate = date('Y-m-d');
     $apodApiUrl = "https://api.nasa.gov/planetary/apod?api_key={$apiKey}&date={$currentDate}";
@@ -51,7 +53,8 @@ function fetchAPOD(): string {
  * 
  * @return string Contenu HTML des informations de localisation.
  */
-function fetchIpInfoLocation(): string {
+function fetchIpInfoLocation(): string 
+{
     $visitorIP = getVisitorIP();
     $ipinfoApiUrl = "https://ipinfo.io/{$visitorIP}/json";
 
@@ -83,7 +86,8 @@ function fetchIpInfoLocation(): string {
  * 
  * @return string Contenu HTML des informations de localisation.
  */
-function fetchGeoPluginLocationJson(): string {
+function fetchGeoPluginLocationJson(): string 
+{
     $visitorIP = getVisitorIP();
     $geoPluginJsonUrl = "http://www.geoplugin.net/json.gp?ip={$visitorIP}";
 
@@ -110,7 +114,8 @@ function fetchGeoPluginLocationJson(): string {
  * 
  * @return string Contenu HTML des informations de localisation.
  */
-function fetchGeoPluginLocationXml(): string {
+function fetchGeoPluginLocationXml(): string 
+{
     $visitorIP = getVisitorIP();
     $geoPluginXmlUrl = "http://www.geoplugin.net/xml.gp?ip={$visitorIP}";
 
@@ -137,7 +142,8 @@ function fetchGeoPluginLocationXml(): string {
  * 
  * @return string Le code HTML pour afficher les informations de localisation.
  */
-function getGeoPluginLocationCsvCode(): string {
+function getGeoPluginLocationCsvCode(): string 
+{
     $visitorIP = getVisitorIP();
     $geoPluginCsvUrl = "http://www.geoplugin.net/csv.gp?ip={$visitorIP}";
     $locationInfo = '';
@@ -182,7 +188,8 @@ function getGeoPluginLocationCsvCode(): string {
  *
  * @return string Le mode actuel sélectionné ('jour' ou 'nuit').
  */
-function gestionTheme(string $src): string {
+function gestionTheme(string $src): string 
+{
     // Vérification si le mode a été choisi
     if(isset($_GET['mode'])) {
         // Mode nuit choisi
@@ -286,6 +293,11 @@ function departuresAPIRequest(bool $nomGare) : mixed
     $liste_des_gares = json_decode($gareResponse, true);
     curl_close($ch1);
 
+    if($liste_des_gares === null)
+    {
+        return "<p> la gare n'a pas été trouvée </p>";
+    }
+    echo '<p>pouet</p>';
     $gare = $liste_des_gares["results"][0]["code_uic"];
     $affGare = $liste_des_gares["results"][0]["libelle"]; 
 
@@ -315,7 +327,7 @@ function departuresAPIRequest(bool $nomGare) : mixed
 /**
  * Permet l'affichage du cookie si il existe et qu'aucune entrée n'a été faite dans le champ de recherche.
  *
- * @return string
+ * @return string l'affichage au format HTML.
  */
 function lastDepartureSearch() : string
 {
@@ -324,6 +336,7 @@ function lastDepartureSearch() : string
         return $_COOKIE['lastDeparture'];
     }
     else if(isset($_GET['q'])) {
+        updateStats(departuresAPIRequest(true));
         return departures(departuresAPIRequest(false));
     }
     return "premiere visite ? commencez par entrer un nom de gare dans le champ ci dessus !";
@@ -448,6 +461,7 @@ function rechercheInfoGare() : string
                         $html .= "<p>Aucun horaire trouvé pour cette gare.</p>";
                     }
                 }
+                updateStats($nom_gare);
             } else {
                 $html = "<p>Aucune donnée trouvée.</p>";
             }
@@ -463,4 +477,82 @@ function rechercheInfoGare() : string
         }        
         return $html;
     }
+
+    /**
+     * Cette fonction met à jour les statistiques de recherche de gare dans un fichier CSV
+     *
+     * Si la gare a déjà été recherchée, on incrémente le nombre de recherches associé, si c'est une première recherche, on ajoute une nouvelle ligne au fichier.
+     * @param string $nomGare la gare recherchée.
+     * @return void
+     */
+function updateStats(string $nomGare) : void
+{
+    // on ouvre les fichiers : le fichier original en lecture, et un fichier temporaire en écriture
+    $oldCSVFile = fopen('statsRecherche.csv', 'r');
+    $newCSVFile = fopen('tempStats.csv', 'w');
+    $modified = false;
+    // on parcourt tout le fichier en modifiant le nombre de visite si la gare est trouvée, puis on écrit la ligne dans le fichier temporaire
+    while (($line = fgetcsv($oldCSVFile)) !== false)
+    {
+        if ($line[0] === $nomGare)
+        {
+            $line[1]++;
+            $modified = true;
+        }
+        fputcsv($newCSVFile, $line);
+    }
+    // si on a rien modifié, on ajoute au fichier temporaire une nouvelle ligne avec le nom de la gare, et un compteur de recherche à 1
+    if(!$modified)
+    {
+        $line = [$nomGare,1];
+        fputcsv($newCSVFile,$line);
+    }
+    // on ferme les 2 fichiers, on supprime l'original, et le temporaire devient le nouvel "original"
+    fclose($oldCSVFile);
+    fclose($newCSVFile);
+    unlink('statsRecherche.csv');
+    rename('tempStats.csv','statsRecherche.csv');
+}
+
+function getStats() : string
+{
+    // on récupère le contenu du fichier csv, et on le met dans un tableau, et on trie ce tableau par ordre décroissant
+    $CSVFile = fopen('statsRecherche.csv', 'r');
+    $ranking = [];
+    while(($line = fgetcsv($CSVFile)) !== false)
+    {
+        $ranking[$line[0]] = $line[1];
+    }
+    arsort($ranking);
+
+    //ensuite on formatte un tableau en HTML affichant le classement
+    $html = "<h2> nombre de recherches par gare</h2>
+    <table>";
+    $html .= 
+    "<thead>
+        <tr>
+            <th>Classement</th>
+            <th>Gare</th>
+            <th>Nombre de recherches</th>
+        </tr>
+    </thead><tbody>";
+    $i = 0;
+    foreach($ranking as $nomGare => $nbRecherches)
+    {
+        //on ignore l'entête du fichier
+        if($nomGare === "nom de gare")
+        {
+            continue;
+        }
+        $i++;
+        $html .="<tr>
+                    <td>$i</td>
+                    <td>$nomGare</td>
+                    <td>$nbRecherches</td>
+                </tr>";
+    }
+    $html .="</tbody></table>";
+
+    return $html;
+}
 ?>

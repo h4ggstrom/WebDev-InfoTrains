@@ -1,7 +1,7 @@
 
 <?php 
-	$title = "UJR Acceuil";
-	$h1 = "projet php";
+	$title = "Infos Gare";
+	$h1 = "Infos Gare";
 	require_once "include/fonctions.inc.php";
 	require "include/header.inc.php";
 	require_once "include/util.php";
