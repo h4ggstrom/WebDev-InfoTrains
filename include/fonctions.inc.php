@@ -387,104 +387,104 @@ function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $l
  * @return string le code html d'affichage. 
  */
 function rechercheInfoGare() : string
-    {
-        if(isset($_GET['search'])) {
-            $searchTerm = urlencode($_GET['search']);
-            $base_path = "https://ressources.data.sncf.com/api/explore/v2.1";
-            $dataset_path = "/catalog/datasets/gares-de-voyageurs/records";
-            $horaires_dataset_path = "/catalog/datasets/horaires-des-gares1/records";
+{
+    if(isset($_GET['search'])) {
+        $searchTerm = urlencode($_GET['search']);
+        $base_path = "https://ressources.data.sncf.com/api/explore/v2.1";
+        $dataset_path = "/catalog/datasets/gares-de-voyageurs/records";
+        $horaires_dataset_path = "/catalog/datasets/horaires-des-gares1/records";
 
-            $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
+        $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
 
-            // echo "URL de requête : " . $url;
+        // echo "URL de requête : " . $url;
 
-            // Appel à l'API
-            $response = file_get_contents($url);
-            $data = json_decode($response, true);
+        // Appel à l'API
+        $response = file_get_contents($url);
+        $data = json_decode($response, true);
 
-            // Vérifier si les données ont été récupérées avec succès et si elles existent
-            if(isset($data['results']) && count($data['results']) > 0) {
-                // Affichage des résultats
-                $html = "<h1>Résultats de la recherche :</h1>";
-                foreach($data['results'] as $result) {
-                    $html .= "<h2>Informations sur la gare :</h2>";
-                    foreach($result as $key => $value) {
-                        if(is_array($value)) {
-                            // Si la valeur est un tableau (par exemple, position géographique)
-                            $html .="<p>$key :</p><ul>";
-                            foreach($value as $subKey => $subValue) {
-                                $html .= "<li>$subKey : $subValue</li>";
-                            }
-                            $html .= "</ul>";
-                        } else {
-                            $html .= "<p>$key : $value</p>";
+        // Vérifier si les données ont été récupérées avec succès et si elles existent
+        if(isset($data['results']) && count($data['results']) > 0) {
+            // Affichage des résultats
+            $html = "<h1>Résultats de la recherche :</h1>";
+            foreach($data['results'] as $result) {
+                $html .= "<h2>Informations sur la gare :</h2>";
+                foreach($result as $key => $value) {
+                    if(is_array($value)) {
+                        // Si la valeur est un tableau (par exemple, position géographique)
+                        $html .="<p>$key :</p><ul>";
+                        foreach($value as $subKey => $subValue) {
+                            $html .= "<li>$subKey : $subValue</li>";
                         }
-                    }
-                    $lon = $result['position_geographique']['lon'];
-                    $lat = $result['position_geographique']['lat'];
-                    $html .= afficherCarte($lat, $lon);
-
-
-                    // Récupérer le nom normal de la gare pour la recherche d'horaires
-                    $nom_gare = urlencode($result['nom']);
-
-                    // Construire l'URL de requête pour les horaires de la gare
-                    $url_horaires = $base_path . $horaires_dataset_path . "?where=nom_normal%20like%20%22$nom_gare%22";
-
-                    // Appel à l'API pour les horaires de la gare
-                    $response_horaires = file_get_contents($url_horaires);
-                    $data_horaires = json_decode($response_horaires, true);
-
-                    // Vérifier si les horaires de la gare ont été récupérés avec succès et si elles existent
-                    if(isset($data_horaires['results']) && count($data_horaires['results']) > 0) {
-                        
-                        // horaires de la gare, sous forme de tableau
-                        $html .= "<h2>Horaires de la gare :</h2>";
-                        
-                        $html .= "<table>";
-                        $html .= "<thead>
-                            <tr>
-                                <th>jour</th>
-                                <th>horaires normaux</th>
-                                <th>horaires en jour férié</th>
-                            </tr>
-                        </thead><tbody>";
-                        foreach($data_horaires['results'] as $horaire) {
-                            $html .= "<tr><td>" . $horaire['jour'] . "</td>";
-                            $html .= "<td>".$horaire['horaire_normal']."</td>";
-                            if(isset($horaire['horaire_ferie']) && ($horaire['horaire_ferie'] !== null)) {
-                                $html .= "<td>" . $horaire['horaire_ferie'] . "</td></tr>";
-                            }
-                        }
-                        $html .= "</tbody></table>";
+                        $html .= "</ul>";
                     } else {
-                        $html .= "<p>Aucun horaire trouvé pour cette gare.</p>";
+                        $html .= "<p>$key : $value</p>";
                     }
                 }
-                updateStats($nom_gare);
-            } else {
-                $html = "<p>Aucune donnée trouvée.</p>";
+                $lon = $result['position_geographique']['lon'];
+                $lat = $result['position_geographique']['lat'];
+                $html .= afficherCarte($lat, $lon);
+
+
+                // Récupérer le nom normal de la gare pour la recherche d'horaires
+                $nom_gare = urlencode($result['nom']);
+
+                // Construire l'URL de requête pour les horaires de la gare
+                $url_horaires = $base_path . $horaires_dataset_path . "?where=nom_normal%20like%20%22$nom_gare%22";
+
+                // Appel à l'API pour les horaires de la gare
+                $response_horaires = file_get_contents($url_horaires);
+                $data_horaires = json_decode($response_horaires, true);
+
+                // Vérifier si les horaires de la gare ont été récupérés avec succès et si elles existent
+                if(isset($data_horaires['results']) && count($data_horaires['results']) > 0) {
+                    
+                    // horaires de la gare, sous forme de tableau
+                    $html .= "<h2>Horaires de la gare :</h2>";
+                    
+                    $html .= "<table>";
+                    $html .= "<thead>
+                        <tr>
+                            <th>jour</th>
+                            <th>horaires normaux</th>
+                            <th>horaires en jour férié</th>
+                        </tr>
+                    </thead><tbody>";
+                    foreach($data_horaires['results'] as $horaire) {
+                        $html .= "<tr><td>" . $horaire['jour'] . "</td>";
+                        $html .= "<td>".$horaire['horaire_normal']."</td>";
+                        if(isset($horaire['horaire_ferie']) && ($horaire['horaire_ferie'] !== null)) {
+                            $html .= "<td>" . $horaire['horaire_ferie'] . "</td></tr>";
+                        }
+                    }
+                    $html .= "</tbody></table>";
+                } else {
+                    $html .= "<p>Aucun horaire trouvé pour cette gare.</p>";
+                }
             }
-            setcookie('lastInfoSearch',$html,time() + (86400 * 30));
-        
-        // si le champ de recherche est vide, on vérifie la présence d'un cookie d'une précédente session
-        } else if(isset($_COOKIE['lastInfoSearch']) && !isset($_GET['search'])) {
-            $html = $_COOKIE['lastInfoSearch'];
-
-        // si on arrive ici, il s'agit probablement d'un nouvel utilisateur (ou d'un ancien, puisque les cookies sont conservés pendant un mois, avant d'etre supprimés)
+            updateStats($nom_gare);
         } else {
-            $html = "<h1> Entrez un nom de gare pour commencez</h1>";
-        }        
-        return $html;
-    }
+            $html = "<p>Aucune donnée trouvée.</p>";
+        }
+        setcookie('lastInfoSearch',$html,time() + (86400 * 30));
+    
+    // si le champ de recherche est vide, on vérifie la présence d'un cookie d'une précédente session
+    } else if(isset($_COOKIE['lastInfoSearch']) && !isset($_GET['search'])) {
+        $html = $_COOKIE['lastInfoSearch'];
 
-    /**
-     * Cette fonction met à jour les statistiques de recherche de gare dans un fichier CSV
-     *
-     * Si la gare a déjà été recherchée, on incrémente le nombre de recherches associé, si c'est une première recherche, on ajoute une nouvelle ligne au fichier.
-     * @param string $nomGare la gare recherchée.
-     * @return void
-     */
+    // si on arrive ici, il s'agit probablement d'un nouvel utilisateur (ou d'un ancien, puisque les cookies sont conservés pendant un mois, avant d'etre supprimés)
+    } else {
+        $html = "<h1> Entrez un nom de gare pour commencez</h1>";
+    }        
+    return $html;
+}
+
+/**
+ * Cette fonction met à jour les statistiques de recherche de gare dans un fichier CSV
+ *
+ * Si la gare a déjà été recherchée, on incrémente le nombre de recherches associé, si c'est une première recherche, on ajoute une nouvelle ligne au fichier.
+ * @param string $nomGare la gare recherchée.
+ * @return void
+ */
 function updateStats(string $nomGare) : void
 {
     // on ouvre les fichiers : le fichier original en lecture, et un fichier temporaire en écriture
@@ -514,6 +514,11 @@ function updateStats(string $nomGare) : void
     rename('tempStats.csv','statsRecherche.csv');
 }
 
+/**
+ * récupère les statistiques stockées dans le fichier CSV, et fait un classement des gares les plus recherchées à partir de celles-ci.
+ *
+ * @return string le tableau html du classement.
+ */
 function getStats() : string
 {
     // on récupère le contenu du fichier csv, et on le met dans un tableau, et on trie ce tableau par ordre décroissant
