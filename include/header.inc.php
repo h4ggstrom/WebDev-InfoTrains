@@ -19,6 +19,7 @@
 				<li><a href="<?php echo "index.php" ?>">Accueil</a></li>
 				<li><a href="<?php echo "depart.php" ?>">Départ</a></li>
 				<li><a href="<?php echo "zioum.php" ?>">Information gare</a></li>
+				<li><a href="<?php echo "stats.php" ?>">Statistiques</a></li>
 			</ul>
 		</nav>
 		<figure>

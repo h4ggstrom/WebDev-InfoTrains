@@ -233,8 +233,7 @@ function departures(array $data) : string
       <th>ligne</th>
     </tr>
   </thead>
-  <tbody>
-    <tr>";
+  <tbody>";
   foreach($data["departures"] as $v) {
 
     // nom de la gare
@@ -257,11 +256,10 @@ function departures(array $data) : string
     </tr>";
   }
   $html .=
-  "</tr>
-  </tbody>
+  "</tbody>
   </table>";
 
-  setcookie("lastDeparture", $html, time() + (86400 * 30));
+  //setcookie("lastDeparture", $html, time() + (86400 * 30));
   return $html;
   
 }
@@ -297,7 +295,6 @@ function departuresAPIRequest(bool $nomGare) : mixed
     {
         return "<p> la gare n'a pas été trouvée </p>";
     }
-    echo '<p>pouet</p>';
     $gare = $liste_des_gares["results"][0]["code_uic"];
     $affGare = $liste_des_gares["results"][0]["libelle"]; 
 
@@ -305,7 +302,7 @@ function departuresAPIRequest(bool $nomGare) : mixed
     if($nomGare === true) {
         return $affGare;
     }
-    setcookie("lastDepName", $affGare, time() + (86400 * 30));
+    //setcookie("lastDepName", $affGare, time() + (86400 * 30));
 
     //API URL
     // pour vérifier manuellement : https://e9d5c3e8-6cfe-4725-8914-edda6d54d892@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:87276535/departures
@@ -377,7 +374,7 @@ function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $l
     $url .= "&amp;marker=$latitude,$longitude";
 
     // Affichage de la carte dans un iframe
-    $map = "<iframe width=\"$largeur\" height=\"$hauteur\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"$url\"></iframe>";
+    $map = "<iframe width=\"$largeur\" height=\"$hauteur\" src=\"$url\"></iframe>";
     return $map;
 }
 
@@ -465,7 +462,7 @@ function rechercheInfoGare() : string
         } else {
             $html = "<p>Aucune donnée trouvée.</p>";
         }
-        setcookie('lastInfoSearch',$html,time() + (86400 * 30));
+        //setcookie('lastInfoSearch',$html,time() + (86400 * 30));
     
     // si le champ de recherche est vide, on vérifie la présence d'un cookie d'une précédente session
     } else if(isset($_COOKIE['lastInfoSearch']) && !isset($_GET['search'])) {
@@ -488,8 +485,8 @@ function rechercheInfoGare() : string
 function updateStats(string $nomGare) : void
 {
     // on ouvre les fichiers : le fichier original en lecture, et un fichier temporaire en écriture
-    $oldCSVFile = fopen('statsRecherche.csv', 'r');
-    $newCSVFile = fopen('tempStats.csv', 'w');
+    $oldCSVFile = fopen('./data/statsRecherche.csv', 'r');
+    $newCSVFile = fopen('./data/tempStats.csv', 'w');
     $modified = false;
     // on parcourt tout le fichier en modifiant le nombre de visite si la gare est trouvée, puis on écrit la ligne dans le fichier temporaire
     while (($line = fgetcsv($oldCSVFile)) !== false)
@@ -510,8 +507,8 @@ function updateStats(string $nomGare) : void
     // on ferme les 2 fichiers, on supprime l'original, et le temporaire devient le nouvel "original"
     fclose($oldCSVFile);
     fclose($newCSVFile);
-    unlink('statsRecherche.csv');
-    rename('tempStats.csv','statsRecherche.csv');
+    unlink('./data/statsRecherche.csv');
+    rename('./data/tempStats.csv','./data/statsRecherche.csv');
 }
 
 /**
@@ -522,7 +519,7 @@ function updateStats(string $nomGare) : void
 function getStats() : string
 {
     // on récupère le contenu du fichier csv, et on le met dans un tableau, et on trie ce tableau par ordre décroissant
-    $CSVFile = fopen('statsRecherche.csv', 'r');
+    $CSVFile = fopen('./data/statsRecherche.csv', 'r');
     $ranking = [];
     while(($line = fgetcsv($CSVFile)) !== false)
     {
@@ -558,6 +555,20 @@ function getStats() : string
     }
     $html .="</tbody></table>";
 
+    return $html;
+}
+function getDatalist() : string
+{
+    $html = '<datalist id="search">';
+    $file = fopen('./data/liste_gares.csv','r');
+    while(($line = fgetcsv($file)) !== false)
+    {
+        $html .= '<option value="';
+        $html .= $line[0] . '">';
+        //$html .= '"></option>';
+    }
+    $html .= '</datalist>';
+    fclose($file);
     return $html;
 }
 ?>

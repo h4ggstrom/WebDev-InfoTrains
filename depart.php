@@ -12,7 +12,8 @@
 <main>
 
   <form method="get" action="./depart.php">
-    <input type="search" placeholder="Entrer un nom de gare" name="q">
+    <input list="search" placeholder="Entrer un nom de gare" name="q">
+    <?php echo getDatalist()?>
     <button type="submit">Rechercher</button>
   </form>
 

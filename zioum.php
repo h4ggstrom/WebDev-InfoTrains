@@ -9,13 +9,13 @@
 ?>
 
     <form method="GET">
-        <label for="search">Rechercher :</label>
-        <input type="text" id="search" name="search">
-        <input type="submit" value="Rechercher">
+		<input type="submit" value="Zioum">
+        <input list="search" id="gare" name="search" placeholder="Rechercher">
+		<?php echo getDatalist()?> 
+
     </form>
 
     <?php echo rechercheInfoGare()?>
-</main>
 
 <?php
 
