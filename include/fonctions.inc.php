@@ -259,7 +259,7 @@ function departures(array $data) : string
   "</tbody>
   </table>";
 
-  //setcookie("lastDeparture", $html, time() + (86400 * 30));
+  setcookie("lastDeparture", $html, time() + (86400 * 30));
   return $html;
   
 }
@@ -306,7 +306,7 @@ function departuresAPIRequest(bool $nomGare) : mixed
     if($nomGare === true) {
         return $affGare;
     }
-    //setcookie("lastDepName", $affGare, time() + (86400 * 30));
+    setcookie("lastDepName", $affGare, time() + (86400 * 30));
 
     //API URL
     // pour vérifier manuellement : https://e9d5c3e8-6cfe-4725-8914-edda6d54d892@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:87276535/departures
@@ -397,7 +397,6 @@ function rechercheInfoGare() : string
 
         $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
 
-         echo "URL de requête : " . $url;
 
         // Appel à l'API
         $response = file_get_contents($url);
@@ -466,7 +465,7 @@ function rechercheInfoGare() : string
         } else {
             $html = "<p>Aucune donnée trouvée.</p>";
         }
-        //setcookie('lastInfoSearch',$html,time() + (86400 * 30));
+        setcookie('lastInfoSearch',$html,time() + (86400 * 30));
     
     // si le champ de recherche est vide, on vérifie la présence d'un cookie d'une précédente session
     } else if(isset($_COOKIE['lastInfoSearch']) && !isset($_GET['search'])) {

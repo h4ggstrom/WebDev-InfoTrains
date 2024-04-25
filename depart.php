@@ -11,20 +11,20 @@
    } else {
     $affgare = "Entrez un nom de gare pour commencer";
   };
+  $departs = lastDepartureSearch();
+  $datalist = getDatalist();
 ?>
 
 <main>
 
-  <form method="get" action="./depart.php">
+  <form method="get">
     <input list="search" placeholder="Entrer un nom de gare" name="q">
-    <?php echo getDatalist()?>
+    <?$datalist?>
     <button type="submit">Rechercher</button>
   </form>
 
   <h1><?=$affgare?></h1>
-    <?php
-      echo lastDepartureSearch();
-    ?>
+    <?=$departs?>
 </main>
 
 <?php
