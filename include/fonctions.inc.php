@@ -277,9 +277,13 @@ function departuresAPIRequest(bool $nomGare) : mixed
 {
     $apiKey = "e9d5c3e8-6cfe-4725-8914-edda6d54d892";
   
-    $where = "\"" . $_GET['q'] . "\"";
-    $url0 = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/liste-des-gares/records?where=$where&?limit=1";
-
+    //$url0 = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/liste-des-gares/records?where=$where&?limit=1";
+    //$searchTerm = "\"" . $_GET['q'] . "\"";
+    $searchTerm =  "\"" .rawurlencode($_GET['q']). "\"";
+    $base_path = "https://ressources.data.sncf.com/api/explore/v2.1/";
+    $dataset_path = "catalog/datasets/liste-des-gares/records";
+    //$url0 = $base_path . $dataset_path . "?where=$searchTerm&?limit=1";
+    $url0 = $base_path . $dataset_path . "?where=$searchTerm&?limit=1";
     //setup cURL
     $ch1 = curl_init($url0);
     curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
@@ -393,7 +397,7 @@ function rechercheInfoGare() : string
 
         $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
 
-        // echo "URL de requête : " . $url;
+         echo "URL de requête : " . $url;
 
         // Appel à l'API
         $response = file_get_contents($url);
@@ -542,10 +546,11 @@ function getStats() : string
     foreach($ranking as $nomGare => $nbRecherches)
     {
         //on ignore l'entête du fichier
-        if($nomGare === "nom de gare")
+        if($nomGare === "nom de gare" || $nomGare === "la gare n'a pas été trouvée")
         {
             continue;
         }
+        $nomGare = urldecode($nomGare);
         $i++;
         $html .="<tr>
                     <td>$i</td>

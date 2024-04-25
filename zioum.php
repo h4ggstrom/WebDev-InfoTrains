@@ -9,7 +9,7 @@
 ?>
 
     <form method="GET">
-		<input type="submit" value="Zioum">
+		<input type="submit" value="Go">
         <input list="search" id="gare" name="search" placeholder="Rechercher">
 		<?php echo getDatalist()?> 
 

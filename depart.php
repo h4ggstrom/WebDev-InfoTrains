@@ -6,7 +6,11 @@
   require "include/header.inc.php";
   require_once "include/util.php";
   $navigateur = get_navigateur();
-  $affGare = lastDepartureName();
+  if (isset($_GET['q'])) { 
+    $affgare = $_GET['q'];
+   } else {
+    $affgare = "Entrez un nom de gare pour commencer";
+  };
 ?>
 
 <main>
@@ -17,7 +21,7 @@
     <button type="submit">Rechercher</button>
   </form>
 
-  <h1><?=$affGare;?></h1>
+  <h1><?=$affgare?></h1>
     <?php
       echo lastDepartureSearch();
     ?>
