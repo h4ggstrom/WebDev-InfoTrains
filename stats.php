@@ -5,9 +5,9 @@
 	require "include/header.inc.php";
 	require_once "include/util.php";
 	$navigateur = get_navigateur();
-    echo getStats();
+    $graph = getGraph();
 ?>
-
+<?=$graph?>
 <h2>Que sont ces chiffres ?</h2>
 <p>
     Ce tableau représente le classement général (et donc commun à tous les utilisateurs) des gares les plus recherchées sur ce site.

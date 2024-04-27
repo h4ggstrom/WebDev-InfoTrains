@@ -224,43 +224,51 @@ function gestionTheme(string $src): string
  */
 function departures(array $data) : string
 {
-  $html =  
-  "<table>
-  <thead>
-    <tr>
-      <th>direction</th>
-      <th>heure de départ</th>
-      <th>ligne</th>
-    </tr>
-  </thead>
-  <tbody>";
-  foreach($data["departures"] as $v) {
+    if(count($data) === 0){return "<p>informations non disponibles</p>";}
+    //if(isset($data) && count($data['results']) > 0)
+    //{
+        $html =  
+        "<table>
+        <thead>
+            <tr>
+            <th>direction</th>
+            <th>heure de départ</th>
+            <th>ligne</th>
+            </tr>
+        </thead>
+        <tbody>";
+        foreach($data["departures"] as $v) {
 
-    // nom de la gare
-    $nomGare = $v["display_informations"]["direction"];
+            // nom de la gare
+            $nomGare = $v["display_informations"]["direction"];
 
-    //heure de départ + conversion (YYYYmmdd T hhmmss --> h + m)
-    $departureTime = $v["stop_date_time"]["departure_date_time"];
-    $heure = substr($departureTime, 9, 2);
-    $minute = substr($departureTime, 11, 2);
+            //heure de départ + conversion (YYYYmmdd T hhmmss --> h + m)
+            $departureTime = $v["stop_date_time"]["departure_date_time"];
+            $heure = substr($departureTime, 9, 2);
+            $minute = substr($departureTime, 11, 2);
 
-    //type de train + ligne
-    $trainType = $v["route"]["line"]["commercial_mode"]["name"];
-    $line = $v["route"]["line"]["name"];
+            //type de train + ligne
+            $trainType = $v["route"]["line"]["commercial_mode"]["name"];
+            $line = $v["route"]["line"]["name"];
 
-    $html .=  
-    "<tr>
-      <td>$nomGare</td>
-      <td>$heure h $minute</td>
-      <td>$trainType $line</td>
-    </tr>";
-  }
-  $html .=
-  "</tbody>
-  </table>";
-
-  setcookie("lastDeparture", $html, time() + (86400 * 30));
-  return $html;
+            $html .=  
+            "<tr>
+            <td>$nomGare</td>
+            <td>$heure h $minute</td>
+            <td>$trainType $line</td>
+            </tr>";
+        }
+        $html .=
+        "</tbody>
+        </table>";
+        setcookie("lastDeparture", $html, time() + (86400 * 30));
+        updateStats(lastDepartureName());
+    //}
+    //else{
+    //    $html = "<p> la gare n'a pas été trouvée<p>";
+    //}
+    
+    return $html;
   
 }
 
@@ -270,57 +278,62 @@ function departures(array $data) : string
  * Elle fait en réalité 2 appels : le premier sert à trouver le nom de gare ressemblant le plus au nom entré par l'utilisateur (aka le premier résultat renvoyé par l'API).
  * Le deuxième s'occupe de récupérer les informations de départ, à partir du nom de gare renvoyé par le premier appel.
  *
- * @param boolean $nomGare si défini sur "true", renvoie seulement le nom de la gare. Sinon renvoie le flux JSON décodé sous forme d'un "array".
- * @return mixed subséquemment, retourne soit un "string" contenant le nom de la gare, soit un "array" resultat du flux JSON décodé.
+
+ * @return array retourne un "array" resultat du flux JSON décodé.
  */
-function departuresAPIRequest(bool $nomGare) : mixed
+function departuresAPIRequest() : array
 {
-    $apiKey = "e9d5c3e8-6cfe-4725-8914-edda6d54d892";
-  
-    //$url0 = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/liste-des-gares/records?where=$where&?limit=1";
-    //$searchTerm = "\"" . $_GET['q'] . "\"";
-    $searchTerm =  "\"" .rawurlencode($_GET['q']). "\"";
-    $base_path = "https://ressources.data.sncf.com/api/explore/v2.1/";
-    $dataset_path = "catalog/datasets/liste-des-gares/records";
-    //$url0 = $base_path . $dataset_path . "?where=$searchTerm&?limit=1";
-    $url0 = $base_path . $dataset_path . "?where=$searchTerm&?limit=1";
-    //setup cURL
-    $ch1 = curl_init($url0);
-    curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-    $gareResponse = curl_exec($ch1);
-    if (curl_errno($ch1)) {
-        echo "Erreur cURL: " . curl_error($ch1);
-        die();
-    }
-    $liste_des_gares = json_decode($gareResponse, true);
-    curl_close($ch1);
-
-    if($liste_des_gares === null)
+    if(isset($_GET['q']))
     {
-        return "<p> la gare n'a pas été trouvée </p>";
-    }
-    $gare = $liste_des_gares["results"][0]["code_uic"];
-    $affGare = $liste_des_gares["results"][0]["libelle"]; 
+        $apiKey = "e9d5c3e8-6cfe-4725-8914-edda6d54d892";
+        //$url0 = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/liste-des-gares/records?where=$where&?limit=1";
 
-    // retourne le nom de la gare
-    if($nomGare === true) {
-        return $affGare;
-    }
-    setcookie("lastDepName", $affGare, time() + (86400 * 30));
+        //construction de l'URL
+        $searchTerm =  "\"" .rawurlencode($_GET['q']). "\"";
+        $base_path = "https://ressources.data.sncf.com/api/explore/v2.1/";
+        $dataset_path = "catalog/datasets/liste-des-gares/records";
+        $url0 = $base_path . $dataset_path . "?where=$searchTerm&?limit=1";
 
-    //API URL
-    // pour vérifier manuellement : https://e9d5c3e8-6cfe-4725-8914-edda6d54d892@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:87276535/departures
-    $url = "https://$apiKey@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:$gare/departures";
+        //cURL
+        $ch1 = curl_init($url0);
+        curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
+        $gareResponse = curl_exec($ch1);
+        if (curl_errno($ch1)) {
+            echo "Erreur cURL: " . curl_error($ch1);
+            die();
+        }
+        $liste_des_gares = json_decode($gareResponse, true);
+        curl_close($ch1);
 
-    // deuxieme session cURL
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    if (curl_errno($ch)) {
-        echo "Erreur cURL: " . curl_error($ch);
-        die();
+        if(count($liste_des_gares["results"]) <= 0)
+        {
+            return array();
+        }
+        $gare = $liste_des_gares["results"][0]["code_uic"];
+        $affGare = $liste_des_gares["results"][0]["libelle"]; 
+
+        // retourne le nom de la gare
+        setcookie("lastDepName", $affGare, time() + (86400 * 30));
+
+        //API URL
+        // pour vérifier manuellement : https://e9d5c3e8-6cfe-4725-8914-edda6d54d892@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:87276535/departures
+        $url = "https://$apiKey@api.sncf.com/v1/coverage/sncf/stop_areas/stop_area:SNCF:$gare/departures";
+
+        // deuxieme session cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        if (curl_errno($ch)) {
+            echo "Erreur cURL: " . curl_error($ch);
+            die();
+        }
+        $data = json_decode($response, true);
     }
-    $data = json_decode($response, true);
+
+    if($data === null)
+    {
+        $data = array();
+    }
     curl_close($ch);
     return $data;
 }
@@ -337,10 +350,9 @@ function lastDepartureSearch() : string
         return $_COOKIE['lastDeparture'];
     }
     else if(isset($_GET['q'])) {
-        updateStats(departuresAPIRequest(true));
-        return departures(departuresAPIRequest(false));
+        return departures(departuresAPIRequest());
     }
-    return "premiere visite ? commencez par entrer un nom de gare dans le champ ci dessus !";
+    return "<h2>premiere visite ? commencez par entrer un nom de gare dans le champ ci dessus !</h2>";
 }
 
 /**
@@ -355,7 +367,7 @@ function lastDepartureName() : string
         return $_COOKIE['lastDepName'];
     }
     else if(isset($_GET['q'])) {
-        return departuresAPIRequest(true);
+        return $_GET['q'];
     }
     return "Recherche de Départs";
 }
@@ -371,7 +383,7 @@ function lastDepartureName() : string
  */
 function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $largeur = 600, int $hauteur = 400) : string
  {
-    // Création de l'URL pour afficher la carte OpenStreetMap avec un marqueur à la position spécifiée
+    // Création de l'URL pour afficher la carte OpenStreetMap avec un marqueur à la pos spécifiée
     $url = "https://www.openstreetmap.org/export/embed.html?bbox=" . ($longitude-0.01) . "," . ($latitude-0.01) . "," . ($longitude+0.01) . "," . ($latitude+0.01) . "&layer=mapnik";
 
     // Ajout des marqueurs à l'URL
@@ -396,6 +408,7 @@ function rechercheInfoGare() : string
         $horaires_dataset_path = "/catalog/datasets/horaires-des-gares1/records";
 
         $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
+        echo "<a href=\"$url\">appel</a>";
 
 
         // Appel à l'API
@@ -517,9 +530,9 @@ function updateStats(string $nomGare) : void
 /**
  * récupère les statistiques stockées dans le fichier CSV, et fait un classement des gares les plus recherchées à partir de celles-ci.
  *
- * @return string le tableau html du classement.
+ * @return array le tableau html du classement.
  */
-function getStats() : string
+function getStats() : array
 {
     // on récupère le contenu du fichier csv, et on le met dans un tableau, et on trie ce tableau par ordre décroissant
     $CSVFile = fopen('./data/statsRecherche.csv', 'r');
@@ -529,50 +542,59 @@ function getStats() : string
         $ranking[$line[0]] = $line[1];
     }
     arsort($ranking);
-
-    //ensuite on formatte un tableau en HTML affichant le classement
-    $html = "<h2> nombre de recherches par gare</h2>
-    <table>";
-    $html .= 
-    "<thead>
-        <tr>
-            <th>Classement</th>
-            <th>Gare</th>
-            <th>Nombre de recherches</th>
-        </tr>
-    </thead><tbody>";
-    $i = 0;
-    foreach($ranking as $nomGare => $nbRecherches)
-    {
-        //on ignore l'entête du fichier
-        if($nomGare === "nom de gare" || $nomGare === "la gare n'a pas été trouvée")
-        {
-            continue;
-        }
-        $nomGare = urldecode($nomGare);
-        $i++;
-        $html .="<tr>
-                    <td>$i</td>
-                    <td>$nomGare</td>
-                    <td>$nbRecherches</td>
-                </tr>";
-    }
-    $html .="</tbody></table>";
-
-    return $html;
+    return $ranking;
+    
 }
-function getDatalist() : string
+
+/**
+ * retourne le code HTML de la datalist avec toutes les gares de France.
+ *
+ * @return string le code html de la datalist
+ */
+function getDatalist(string $id) : string
 {
-    $html = '<datalist id="search">';
+    $html = "<datalist id=\"$id\">";
     $file = fopen('./data/liste_gares.csv','r');
     while(($line = fgetcsv($file)) !== false)
     {
         $html .= '<option value="';
-        $html .= $line[0] . '">';
+        $html .= $line[0] . '">' . PHP_EOL;
         //$html .= '"></option>';
     }
     $html .= '</datalist>';
     fclose($file);
+    return $html;
+}
+
+function getGraph() : string
+{
+    $html = '';
+    //dimensions du graph
+    $data = (array) getStats();
+    $width = "100%";
+    $height = 50 * count($data) + 10;
+    $margin = 10;
+
+    //hauteur de chaque barre + 
+    $barHeight = 40;
+    $maxWidth = 75;
+
+    $html = PHP_EOL . "<svg width=\"$width\" height=\"$height\"style=\"border: 1px solid #ffffff; display: block;\">" . PHP_EOL;
+    $y = $margin;
+    foreach($data as $nom_gare => $nombre_visite)
+    {
+        $nom_gare = urldecode($nom_gare);
+        $barLength = ($nombre_visite / max($data)) * $maxWidth ;
+        $barPercent = "$barLength%";
+        $xVal = $barLength + 2;
+        $posX = "$xVal%";
+        $posY = $y + $barHeight / 1.33;
+        $html .= "<rect x=\"$margin\" y=\"$y\" width=\"$barPercent\" height=\"$barHeight\" fill=\"#42a5f5\"/>" . PHP_EOL;
+        $html .= "<text x=\"$margin\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nombre_visite</text>" . PHP_EOL;
+        $html .= "<text x=\"$posX\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nom_gare</text>" . PHP_EOL;
+        $y += $barHeight + $margin;
+    }
+    $html .= "</svg>";
     return $html;
 }
 ?>

@@ -1,4 +1,3 @@
-
 <?php 
 	$title = "Infos Gare";
 	$h1 = "Infos Gare";
@@ -6,16 +5,18 @@
 	require "include/header.inc.php";
 	require_once "include/util.php";
 	$navigateur = get_navigateur();
+	$datalist = getDatalist('search');
+	$infosGare = rechercheInfoGare();
 ?>
 
     <form method="GET">
 		<input type="submit" value="Go">
         <input list="search" id="gare" name="search" placeholder="Rechercher">
-		<?php echo getDatalist()?> 
+		<?=$datalist?> 
 
     </form>
 
-    <?php echo rechercheInfoGare()?>
+    <?=$infosGare?>
 
 <?php
 

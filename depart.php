@@ -6,21 +6,18 @@
   require "include/header.inc.php";
   require_once "include/util.php";
   $navigateur = get_navigateur();
-  if (isset($_GET['q'])) { 
-    $affgare = $_GET['q'];
-   } else {
-    $affgare = "Entrez un nom de gare pour commencer";
-  };
+  $affgare = lastDepartureName();
   $departs = lastDepartureSearch();
-  $datalist = getDatalist();
+  $datalist = getDatalist('search');
 ?>
 
 <main>
 
-  <form method="get">
-    <input list="search" placeholder="Entrer un nom de gare" name="q">
-    <?$datalist?>
+  <form method="GET">
     <button type="submit">Rechercher</button>
+    <input list="search" id="gare" name="q" placeholder="Entrer un nom de gare" >
+    <?=$datalist?>
+
   </form>
 
   <h1><?=$affgare?></h1>
