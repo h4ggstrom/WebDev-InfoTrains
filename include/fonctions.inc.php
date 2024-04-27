@@ -225,49 +225,44 @@ function gestionTheme(string $src): string
 function departures(array $data) : string
 {
     if(count($data) === 0){return "<p>informations non disponibles</p>";}
-    //if(isset($data) && count($data['results']) > 0)
-    //{
-        $html =  
-        "<table>
-        <thead>
-            <tr>
-            <th>direction</th>
-            <th>heure de départ</th>
-            <th>ligne</th>
-            </tr>
-        </thead>
-        <tbody>";
-        foreach($data["departures"] as $v) {
 
-            // nom de la gare
-            $nomGare = $v["display_informations"]["direction"];
+    $html =  
+    "<table>
+    <thead>
+        <tr>
+        <th>direction</th>
+        <th>heure de départ</th>
+        <th>ligne</th>
+        </tr>
+    </thead>
+    <tbody>";
+    foreach($data["departures"] as $v) {
 
-            //heure de départ + conversion (YYYYmmdd T hhmmss --> h + m)
-            $departureTime = $v["stop_date_time"]["departure_date_time"];
-            $heure = substr($departureTime, 9, 2);
-            $minute = substr($departureTime, 11, 2);
+        // nom de la gare
+        $nomGare = $v["display_informations"]["direction"];
 
-            //type de train + ligne
-            $trainType = $v["route"]["line"]["commercial_mode"]["name"];
-            $line = $v["route"]["line"]["name"];
+        //heure de départ + conversion (YYYYmmdd T hhmmss --> h + m)
+        $departureTime = $v["stop_date_time"]["departure_date_time"];
+        $heure = substr($departureTime, 9, 2);
+        $minute = substr($departureTime, 11, 2);
 
-            $html .=  
-            "<tr>
-            <td>$nomGare</td>
-            <td>$heure h $minute</td>
-            <td>$trainType $line</td>
-            </tr>";
-        }
-        $html .=
-        "</tbody>
-        </table>";
-        setcookie("lastDeparture", $html, time() + (86400 * 30));
-        updateStats(lastDepartureName());
-    //}
-    //else{
-    //    $html = "<p> la gare n'a pas été trouvée<p>";
-    //}
-    
+        //type de train + ligne
+        $trainType = $v["route"]["line"]["commercial_mode"]["name"];
+        $line = $v["route"]["line"]["name"];
+
+        $html .=  
+        "<tr>
+        <td>$nomGare</td>
+        <td>$heure h $minute</td>
+        <td>$trainType $line</td>
+        </tr>";
+    }
+    $html .=
+    "</tbody>
+    </table>";
+    setcookie("lastDeparture", $html, time() + (86400 * 30));
+    updateStats(lastDepartureName());
+
     return $html;
   
 }
@@ -286,7 +281,6 @@ function departuresAPIRequest() : array
     if(isset($_GET['q']))
     {
         $apiKey = "e9d5c3e8-6cfe-4725-8914-edda6d54d892";
-        //$url0 = "https://ressources.data.sncf.com/api/explore/v2.1/catalog/datasets/liste-des-gares/records?where=$where&?limit=1";
 
         //construction de l'URL
         $searchTerm =  "\"" .rawurlencode($_GET['q']). "\"";
@@ -401,7 +395,8 @@ function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $l
  */
 function rechercheInfoGare() : string
 {
-    if(isset($_GET['search'])) {
+    if(isset($_GET['search'])) 
+    {
         $searchTerm = urlencode($_GET['search']);
         $base_path = "https://ressources.data.sncf.com/api/explore/v2.1";
         $dataset_path = "/catalog/datasets/gares-de-voyageurs/records";
@@ -559,36 +554,43 @@ function getDatalist(string $id) : string
     {
         $html .= '<option value="';
         $html .= $line[0] . '">' . PHP_EOL;
-        //$html .= '"></option>';
     }
     $html .= '</datalist>';
     fclose($file);
     return $html;
 }
-
+/**
+ * crée un graph SVG à partir du jeu de données des stats de recherches.
+ *
+ * @return string le code html du graph SVG
+ */
 function getGraph() : string
 {
     $html = '';
     //dimensions du graph
-    $data = (array) getStats();
+    $data = (array) getStats(); // normalement on a pas besoin de le cast en array, mais ca génère une erreur, donc tant pis.
     $width = "100%";
     $height = 50 * count($data) + 10;
     $margin = 10;
 
-    //hauteur de chaque barre + 
+    //hauteur de chaque barre + la largeur maximale, en pourcentage
     $barHeight = 40;
     $maxWidth = 75;
 
+    //svg init
     $html = PHP_EOL . "<svg width=\"$width\" height=\"$height\"style=\"border: 1px solid #ffffff; display: block;\">" . PHP_EOL;
     $y = $margin;
     foreach($data as $nom_gare => $nombre_visite)
     {
+        // calcul des dimensions de la barre, et de sa position.
         $nom_gare = urldecode($nom_gare);
         $barLength = ($nombre_visite / max($data)) * $maxWidth ;
         $barPercent = "$barLength%";
         $xVal = $barLength + 2;
         $posX = "$xVal%";
         $posY = $y + $barHeight / 1.33;
+
+        // ajout au code html
         $html .= "<rect x=\"$margin\" y=\"$y\" width=\"$barPercent\" height=\"$barHeight\" fill=\"#42a5f5\"/>" . PHP_EOL;
         $html .= "<text x=\"$margin\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nombre_visite</text>" . PHP_EOL;
         $html .= "<text x=\"$posX\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nom_gare</text>" . PHP_EOL;

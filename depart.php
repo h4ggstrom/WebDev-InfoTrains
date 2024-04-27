@@ -1,4 +1,10 @@
 <?php
+/**
+ * page d'affichage des départs pour une gare donnée.
+ * 
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
   declare(strict_types=1);
   $title = "UJR Acceuil";
   $h1 = "projet php";

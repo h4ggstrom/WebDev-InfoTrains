@@ -1,4 +1,10 @@
 <?php 
+/**
+ * page d'affichage des stats de recherches des utilisateurs.
+ * 
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
 	$title = "Statistiques";
 	$h1 = "Statistiques";
 	require_once "include/fonctions.inc.php";

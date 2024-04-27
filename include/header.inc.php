@@ -1,4 +1,13 @@
-<?php $mode = gestionTheme("/projet/"); ?>
+<?php 
+/**
+ * fichier de header.
+ * 
+ * Contient les informations du header.
+ * 
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
+$mode = gestionTheme("/projet/"); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

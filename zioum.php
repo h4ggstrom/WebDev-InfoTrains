@@ -1,4 +1,10 @@
 <?php 
+/**
+ * page d'affichage des informations pour une gare donnée.
+ * 
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
 	$title = "Infos Gare";
 	$h1 = "Infos Gare";
 	require_once "include/fonctions.inc.php";
