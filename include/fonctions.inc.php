@@ -1,4 +1,12 @@
 <?php 
+/**
+ * fichier contenant des fonctions du site.
+ * @file fonctions.inc.php
+ * @brief fichier contenant des fonctions util au site.
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
+ */
 
 /**
  * Fonction pour obtenir l'adresse IP du visiteur.
@@ -19,6 +27,9 @@ function getVisitorIP(): string
 /**
  * Fonction pour récupérer et afficher l'image ou la vidéo de l'API de la NASA avec le texte du jour.
  * 
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Contenu HTML de l'image ou de la vidéo.
  */
 function fetchAPOD(): string 
@@ -50,7 +61,10 @@ function fetchAPOD(): string
 
 /**
  * Fonction pour récupérer et afficher les informations de localisation avec ipinfo.io.
- * 
+ *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Contenu HTML des informations de localisation.
  */
 function fetchIpInfoLocation(): string 
@@ -83,7 +97,10 @@ function fetchIpInfoLocation(): string
 
 /**
  * Fonction pour récupérer et afficher les informations de localisation avec GeoPlugin (JSON).
- * 
+ *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Contenu HTML des informations de localisation.
  */
 function fetchGeoPluginLocationJson(): string 
@@ -111,7 +128,10 @@ function fetchGeoPluginLocationJson(): string
 
 /**
  * Fonction pour récupérer et afficher les informations de localisation avec GeoPlugin (XML).
- * 
+ *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Contenu HTML des informations de localisation.
  */
 function fetchGeoPluginLocationXml(): string 
@@ -140,6 +160,9 @@ function fetchGeoPluginLocationXml(): string
 /**
  * Fonction pour récupérer le code HTML pour afficher les informations de localisation avec GeoPlugin (CSV).
  * 
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Le code HTML pour afficher les informations de localisation.
  */
 function getGeoPluginLocationCsvCode(): string 
@@ -186,6 +209,9 @@ function getGeoPluginLocationCsvCode(): string
  * Cette fonction utilise des cookies pour mémoriser la préférence de l'utilisateur
  * et inclut également le fichier CSS correspondant au thème sélectionné.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Le mode actuel sélectionné ('jour' ou 'nuit').
  */
 function gestionTheme(string $src): string 
@@ -219,12 +245,15 @@ function gestionTheme(string $src): string
 /**
  * cette fonction sert à afficher les départs d'une certaine gare, à partir du flux JSON renvoyé par l'appel à l'API
  * 
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @param array $data le flux JSON
  * @return string $html le tableau au format HTML, contenant les prochains départs
  */
 function departures(array $data) : string
 {
-    if(count($data) === 0){return "<p>informations non disponibles</p>";}
+    if(count($data) === 0){return "<h2>informations non disponibles</h2>";}
 
     $html =  
     "<table>
@@ -273,7 +302,9 @@ function departures(array $data) : string
  * Elle fait en réalité 2 appels : le premier sert à trouver le nom de gare ressemblant le plus au nom entré par l'utilisateur (aka le premier résultat renvoyé par l'API).
  * Le deuxième s'occupe de récupérer les informations de départ, à partir du nom de gare renvoyé par le premier appel.
  *
-
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return array retourne un "array" resultat du flux JSON décodé.
  */
 function departuresAPIRequest() : array
@@ -335,6 +366,9 @@ function departuresAPIRequest() : array
 /**
  * Permet l'affichage du cookie si il existe et qu'aucune entrée n'a été faite dans le champ de recherche.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string l'affichage au format HTML.
  */
 function lastDepartureSearch() : string
@@ -352,6 +386,9 @@ function lastDepartureSearch() : string
 /**
  * gère l'affichage de la dernière session (si elle existe, et que rien n'a été entré)
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string le h1 à afficher
  */
 function lastDepartureName() : string
@@ -368,6 +405,9 @@ function lastDepartureName() : string
 /**
  * Permet l'affichage d'une gare via un appel à l'API d'OpenStreetMap
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @param float $latitude la latitude de la gare
  * @param float $longitude la longitude de la gare
  * @param integer $zoom le niveau de zoom de la map
@@ -378,7 +418,7 @@ function lastDepartureName() : string
 function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $largeur = 600, int $hauteur = 400) : string
  {
     // Création de l'URL pour afficher la carte OpenStreetMap avec un marqueur à la pos spécifiée
-    $url = "https://www.openstreetmap.org/export/embed.html?bbox=" . ($longitude-0.01) . "," . ($latitude-0.01) . "," . ($longitude+0.01) . "," . ($latitude+0.01) . "&layer=mapnik";
+    $url = "https://www.openstreetmap.org/export/embed.html?bbox=" . ($longitude-0.01) . "," . ($latitude-0.01) . "," . ($longitude+0.01) . "," . ($latitude+0.01) . "&amp;layer=mapnik";
 
     // Ajout des marqueurs à l'URL
     $url .= "&amp;marker=$latitude,$longitude";
@@ -391,6 +431,9 @@ function afficherCarte(float $latitude, float $longitude, int $zoom = 10, int $l
 /**
  * Permet l'affichage des informations disponibles d'une gare. Cela comprend, localisation, infos d'identification, et les horaires.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string le code html d'affichage. 
  */
 function rechercheInfoGare() : string
@@ -403,7 +446,6 @@ function rechercheInfoGare() : string
         $horaires_dataset_path = "/catalog/datasets/horaires-des-gares1/records";
 
         $url = $base_path . $dataset_path . "?limit=100&where=codeinsee%20like%20%22$searchTerm%22%20OR%20nom%20like%20%22$searchTerm%22";
-        echo "<a href=\"$url\">appel</a>";
 
 
         // Appel à l'API
@@ -413,19 +455,19 @@ function rechercheInfoGare() : string
         // Vérifier si les données ont été récupérées avec succès et si elles existent
         if(isset($data['results']) && count($data['results']) > 0) {
             // Affichage des résultats
-            $html = "<h1>Résultats de la recherche :</h1>";
+            $html = "<h2>Résultats de la recherche</h2>";
             foreach($data['results'] as $result) {
-                $html .= "<h2>Informations sur la gare :</h2>";
+                $html .= "<h3>Informations sur la gare"." ". $_GET['search']."</h3>";
                 foreach($result as $key => $value) {
                     if(is_array($value)) {
                         // Si la valeur est un tableau (par exemple, position géographique)
-                        $html .="<p>$key :</p><ul>";
+                       // $html .="<p>$key :</p><ul>";
                         foreach($value as $subKey => $subValue) {
-                            $html .= "<li>$subKey : $subValue</li>";
+                            // $html .= "<li>$subKey : $subValue</li>";
                         }
-                        $html .= "</ul>";
+                        // $html .= "</ul>";
                     } else {
-                        $html .= "<p>$key : $value</p>";
+                        // $html .= "<p>$key : $value</p>";
                     }
                 }
                 $lon = $result['position_geographique']['lon'];
@@ -438,7 +480,6 @@ function rechercheInfoGare() : string
 
                 // Construire l'URL de requête pour les horaires de la gare
                 $url_horaires = $base_path . $horaires_dataset_path . "?where=nom_normal%20like%20%22$nom_gare%22";
-
                 // Appel à l'API pour les horaires de la gare
                 $response_horaires = file_get_contents($url_horaires);
                 $data_horaires = json_decode($response_horaires, true);
@@ -447,7 +488,7 @@ function rechercheInfoGare() : string
                 if(isset($data_horaires['results']) && count($data_horaires['results']) > 0) {
                     
                     // horaires de la gare, sous forme de tableau
-                    $html .= "<h2>Horaires de la gare :</h2>";
+                    $html .= "<h3>Horaires de la gare</h3>";
                     
                     $html .= "<table>";
                     $html .= "<thead>
@@ -457,6 +498,7 @@ function rechercheInfoGare() : string
                             <th>horaires en jour férié</th>
                         </tr>
                     </thead><tbody>";
+                    usort($data_horaires['results'], 'compareDays');
                     foreach($data_horaires['results'] as $horaire) {
                         $html .= "<tr><td>" . $horaire['jour'] . "</td>";
                         $html .= "<td>".$horaire['horaire_normal']."</td>";
@@ -471,7 +513,7 @@ function rechercheInfoGare() : string
             }
             updateStats($nom_gare);
         } else {
-            $html = "<p>Aucune donnée trouvée.</p>";
+            $html = "<h2>Aucune donnée trouvée.</h2>";
         }
         setcookie('lastInfoSearch',$html,time() + (86400 * 30));
     
@@ -481,7 +523,7 @@ function rechercheInfoGare() : string
 
     // si on arrive ici, il s'agit probablement d'un nouvel utilisateur (ou d'un ancien, puisque les cookies sont conservés pendant un mois, avant d'etre supprimés)
     } else {
-        $html = "<h1> Entrez un nom de gare pour commencez</h1>";
+        $html = "<h2> Entrez un nom de gare pour commencez</h2>";
     }        
     return $html;
 }
@@ -489,6 +531,9 @@ function rechercheInfoGare() : string
 /**
  * Cette fonction met à jour les statistiques de recherche de gare dans un fichier CSV
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * Si la gare a déjà été recherchée, on incrémente le nombre de recherches associé, si c'est une première recherche, on ajoute une nouvelle ligne au fichier.
  * @param string $nomGare la gare recherchée.
  * @return void
@@ -525,6 +570,9 @@ function updateStats(string $nomGare) : void
 /**
  * récupère les statistiques stockées dans le fichier CSV, et fait un classement des gares les plus recherchées à partir de celles-ci.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return array le tableau html du classement.
  */
 function getStats() : array
@@ -544,6 +592,9 @@ function getStats() : array
 /**
  * retourne le code HTML de la datalist avec toutes les gares de France.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string le code html de la datalist
  */
 function getDatalist(string $id) : string
@@ -553,7 +604,7 @@ function getDatalist(string $id) : string
     while(($line = fgetcsv($file)) !== false)
     {
         $html .= '<option value="';
-        $html .= $line[0] . '">' . PHP_EOL;
+        $html .= $line[0] . '"></option>' . PHP_EOL;
     }
     $html .= '</datalist>';
     fclose($file);
@@ -562,6 +613,9 @@ function getDatalist(string $id) : string
 /**
  * crée un graph SVG à partir du jeu de données des stats de recherches.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string le code html du graph SVG
  */
 function getGraph() : string
@@ -578,7 +632,7 @@ function getGraph() : string
     $maxWidth = 75;
 
     //svg init
-    $html = PHP_EOL . "<svg width=\"$width\" height=\"$height\"style=\"border: 1px solid #ffffff; display: block;\">" . PHP_EOL;
+    $html = PHP_EOL . "<svg width=\"$width\" height=\"$height\" style=\"border: 1px solid #ffffff; display: block;\">" . PHP_EOL;
     $y = $margin;
     foreach($data as $nom_gare => $nombre_visite)
     {
@@ -593,10 +647,28 @@ function getGraph() : string
         // ajout au code html
         $html .= "<rect x=\"$margin\" y=\"$y\" width=\"$barPercent\" height=\"$barHeight\" fill=\"#42a5f5\"/>" . PHP_EOL;
         $html .= "<text x=\"$margin\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nombre_visite</text>" . PHP_EOL;
-        $html .= "<text x=\"$posX\" y=\"$posY\" fill=\"white\" font-size=\"30\"> $nom_gare</text>" . PHP_EOL;
+        $html .= "<text x=\"$posX\" y=\"$posY\" fill=\"#2B6A9E\" font-size=\"30\"> $nom_gare</text>" . PHP_EOL;
         $y += $barHeight + $margin;
     }
     $html .= "</svg>";
     return $html;
+}
+
+/**
+ * Compare deux éléments basés sur le jour de la semaine.
+ *
+ * Cette fonction de comparaison est utilisée pour trier un tableau d'éléments selon le jour de la semaine.
+ *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
+ * @param array $a Le premier élément à comparer.
+ * @param array $b Le deuxième élément à comparer.
+ *
+ * @return int Retourne un entier négatif si $a précède $b, un entier positif si $a suit $b, et 0 si les deux éléments sont égaux en termes de jour de la semaine.
+ */
+function compareDays(Array $a, Array $b) {
+    $daysOfWeek = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+    return array_search($a['jour'], $daysOfWeek) - array_search($b['jour'], $daysOfWeek);
 }
 ?>

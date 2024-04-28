@@ -1,7 +1,19 @@
 <?php
 /**
+ * fichier contenant des fonctions du site.
+ * @file util.php
+ * @brief fichier contenant des fonctions util au site.
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
+
+/**
  * Retourne le nom du navigateur de l'internaute.
  *
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr>
  * @return string Le nom du navigateur.
  */
 function get_navigateur() {

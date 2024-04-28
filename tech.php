@@ -1,7 +1,15 @@
 <?php 
+/**
+ * page d'affichage téchinique du site.
+ * @file tech.php
+ * @brief page d'affichage technique de notre site
+ * @version 1.0
+ * @author Robin de Angelis <robin.de-angelis@etu.cyu.fr>
+ * @author Louis Gallet <louis.gallet@etu.cyu.fr> 
+ */
 	declare(strict_types=1);
-	$title = "UJR Acceuil";
-	$h1 = "tech";
+	$title = "GareSeeker-Tech";
+	$h1 = "Page Technique";
 	require_once "include/fonctions.inc.php";
 	require "include/header.inc.php";
 	require_once "include/util.php";

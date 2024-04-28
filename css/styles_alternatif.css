@@ -1,38 +1,70 @@
-header h1 {
-    color: #fff;
+/* Styles pour le corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #333366;
+    color: #333;
+    margin: 0;
+    padding: 0;
 }
 
-figure {
-            text-align: center;
-        }
+h2 {
+	text-align: center;
+	color: #fff;
+}
 
+article h3 {
+	text-align: center;
+	color: #fff;
+	font-size: 35px;
+}
+
+article figcaption {
+	color: #fff;
+}
+
+/* pour le logo */
 .logo {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  max-width: 100px; 
+  top: 10px;
+  right: 10px;
+  max-width: 250px; 
   height: auto;
 }
+/* pour le thème */
+
+.img_theme {
+	max-width: 70px; 
+	height: auto;
+}
+
+/* Styles pour l'en-tête */
 
 header {
+	align-items: center;
 	background-color: #333;
+	padding: 20px 40px; /* Ajout de padding à gauche et à droite */
+	margin: 20px 20px;
+	border-radius: 10px; /* Arrondir les bords */
+}
+
+/* Styles pour le titre */
+header h1 {
+    font-size: 50px;
 	color: #fff;
-	padding: 10px;
-	border-radius: 10px;
+    margin-bottom: 10px; /* Espace entre le titre et la barre de navigation */
+	text-align: center; /* Pour centrer horizontalement */
 }
 
-h1 {
-	text-align: center;
-}
-
+/* Styles pour la barre de navigation */
 nav {
-    text-align: center;
+    text-align: center; /* Pour centrer horizontalement */
 }
 
 nav ul {
-    list-style: none;
+    list-style-type: none;
+    margin: 0 auto; /* Pour centrer horizontalement */
     padding: 0;
-    margin: 0;
+    display: inline-block; /* Pour que la barre de navigation prenne seulement la largeur nécessaire */
 }
 
 nav li {
@@ -41,233 +73,212 @@ nav li {
 }
 
 nav a {
+	font-size: 30px;
     text-decoration: none;
-    color: #fff; 
-    font-weight: bold; 
-    font-size: 16px; 
-}
-
-footer a {
-    text-decoration: none;
-    color: #fff; 
-} 
-	
-
-
-.ex2 table {
-	border-collapse: collapse;
-	width: 100%;
-}
-
-.ex2 th, td {
-	border: 1px solid black;
-	padding: 8px;
-	text-align: center;
-	font-family: 'Courier New', monospace;
-}
-
-.digit {
-	color: blue;
-}
-
-.uppercase {
-	color: green;
-}
-
-.lowercase {
-	color: red;
-}
-					
-body {
-	font-family: Arial, sans-serif;
-	margin: 20px;
-	background-color: #333366;
     color: #fff;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
-.custom-nav {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    background-color: #eee;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+nav a span {
+    padding: 10px 0;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
 }
 
-.custom-nav a {
+nav a span::after {
+    content: "";
     display: block;
-    margin-bottom: 5px;
-    text-decoration: none;
-    color: #333;
+    height: 3px;
+    background-color: rgb(163, 0, 0);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    transition: width 0.3s ease-in-out;
 }
 
-.custom-nav a:hover {
-    background-color: #ddd;
+nav a:hover span::after {
+    width: 100%;
+}
+
+@keyframes underline {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/*form */
+
+
+.search-form {
+    display: flex;
+}
+
+.search-box {
+    padding: 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #555;
+    color: #fff;
+    font-size: 16px;
+    outline: none;
+	font-size: 18px; /* Augmentez la taille de la police */
+	width: 500px; /* Augmentez la largeur de la barre de recherche */
+	align-items: center;
+}
+
+.search-box::placeholder {
+    color: #ccc;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(200, 0, 0);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgb(163, 0, 0);
 }
 
 
-h2, h3 {
-	text-align: center;
-	color: #fff;
+/* Styles pour la section principale */
+.main-content {
+    padding: 20px;
 }
 
-main section {
-  margin-bottom: 30px;
-}
-
-article {
-  margin-bottom: 30px;
-  padding: 20px;
-  border: 2px solid #42a5f5;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow : 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width:  calc(100% - 40px); 
-  margin-right: 20px; 
-  margin-left: 20px;
-  background-color: #003333;
-}
-
-ul.horizontal-list {
-  list-style-type: none;
-  display: flex;
-  padding: 0;
-}
-
-ul.horizontal-list li {
-  margin-right: 10px;
-  background-color: #64b5f6;
-  padding: 10px;
-  border-radius: 5px;
-  color: #fff;
+.background-image {
+    background-image: url('chemin/vers/votre/image.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-table caption {
-  color: #fff;
-  font-size: 18px;
-  margin-bottom: 10px;
-  text-align: right;
-}
-
-table th, table td {
-  border: 2px solid #42a5f5;
-  padding: 12px;
-  text-align: left;
-  color: #000;
-}
-
-table th {
-  background-color: #42a5f5;
-  color: #fff;
-}
-
-table td {
-  background-color: #f0f8ff;
-}
-
-.empty {
-    visibility: hidden;
-}
-
-.ex1 table {
-	border-collapse: collapse;
-	width: 100%;
-}
-
-.ex1 table, .ex1 th, .ex1 td {
-	border: 1px solid black;
-}
-
-.ex1 th, .ex1 td {
-	padding: 8px;
-	text-align: center;
-}
-
-.ex1 th:first-child,.ex1 td:first-child{
-	font-weight: bold;
-}
-
-.td8 table {
+    width: 100%;
     border-collapse: collapse;
-    width: 50%;
-    margin-top: 20px;
-    font-family: Arial, sans-serif;
-    margin-bottom: 20px;
+    background-color: #fff; /* Couleur de fond claire */
 }
 
-.td8 th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 12px;
+th, td {
+    border: 1px solid #ccc; /* Bordures légères */
+    padding: 8px; /* Espacement interne */
+    text-align: left; /* Alignement du texte à gauche */
+	font-size: 30px;
 }
 
-.td8 th {
+th {
+    background-color: #f2f2f2; /* Couleur de fond légèrement plus foncée pour les en-têtes */
+}
+
+.centered-form {
+    width: 25%; /* Ajustez la largeur selon vos besoins */
+    margin: 0 auto; /* Cela centre le formulaire horizontalement */
+}
+
+article {
+    margin: 0 auto; /* Centrage de l'article */
+    padding: 20px; /* Espacement interne */
+    background-color: #003333; /* Couleur de fond */
+    border-radius: 10px; /* Coins arrondis */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Ombre légère */
+	padding: 20px 40px; /* Ajout de padding à gauche et à droite */
+	margin: 20px 20px;
+	border-radius: 10px; /* Arrondir les bords */
+}
+
+article h1 {
+	text-align: center;
+	font-size: 50px;
+	color: #F7F7F7;
+}
+
+article h2 {
+    font-size: 40px; /* Taille de police pour les titres d'article */
+    margin-bottom: 10px; /* Espacement en bas des titres d'article */
+	text-align: center;
+	color: #F7F7F7;
+}
+
+article p {
+    font-size: 30px; /* Taille de police pour le contenu des articles */
+    line-height: 1.5; /* Hauteur de ligne pour une meilleure lisibilité */
+	color: #F7F7F7;
+}
+
+.special-img {
+    width: 1000px; /* Pour que l'image ne dépasse pas la largeur de la fenêtre */
+    max-height: 1000px; /* Pour que l'image ne dépasse pas la hauteur de la fenêtre */
+    margin-bottom: 20px; /* Espacement en bas des images */
+	display: block;  /* Pour supprimer l'espace réservé autour de l'image */
+    margin: 0 auto; /* Mettre les marges gauche et droite à 'auto' centre l'image horizontalement */
+}
+
+article a {
+	text-decoration: none;
+    color: #F7F7F7;
+    font-weight: bold;
+    transition: color 0.3s;
+	font-size: 25px;
+}
+
+article a span {
+    padding: 10px 0;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+article a span::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background-color: rgb(163, 0, 0);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    transition: width 0.3s ease-in-out;
+}
+
+article a:hover span::after {
+    width: 100%;
+}
+
+@keyframes underline {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+/* Styles pour les pieds de page */
+footer {
     background-color: #333;
-}
-
-.td8 tr:hover {
-    background-color: #333;
+    color: #fff;
+    text-align: center;
+	padding: 20px 40px; /* Ajout de padding à gauche et à droite */
+	margin: 20px 20px;
+	border-radius: 10px; /* Arrondir les bords */
+	font-size: 30px;
 }
 
 footer a {
 	text-decoration: none;
-    color: #fff;
+	color: white;
 }
-
-			
-footer {
-	background-color: #333;
-	color: #fff;
-	text-align: center;
-	padding: 20px;
-	border-radius: 10px;
-}
-
-
-footer a {
-    text-decoration: none;
-    color: white;
-}
-
 
 footer a:visited {
-    color: white; 
-}
-
-.lien-bouton {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    text-align: left;
-    text-decoration: none;
-    background-color: #CC0000;
-    color: #fff;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-	margin-right: auto;
-}
-
-.lien-bouton:hover {
-    background-color: #CC0000;
-}
-
-.lang {
-	max-width: 100px; 
-	height: auto;
-}
-
-a {
-	text-decoration: none;
-    color: white; 
-}
-
-a:visited {
     color: white; 
 }
