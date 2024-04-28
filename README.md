@@ -22,7 +22,7 @@ Le site devra en outre stocker diverses informations côté serveur, notamment d
 Le site sera agrémenté d'un dossier de photos, parmi lesquelles une sera affichée aléatoirement à chaque rafraichissement de page.
 Le site intégrera aussi un système permettant de choisir entre le mode clair et sombre.
 
-## __*__ Liens utiles__*__
+## __*__Liens utiles__*__
 
 - [page GitHub du projet](https://github.com/h4ggstrom/WebDev-InfoTrains)
 - [lien du site](https://louis-gallet.alwausdata.net)
