@@ -25,7 +25,7 @@ Le site intégrera aussi un système permettant de choisir entre le mode clair e
 ## __*__Liens utiles__*__
 
 - [page GitHub du projet](https://github.com/h4ggstrom/WebDev-InfoTrains)
-- [lien du site](https://louis-gallet.alwausdata.net)
+- [lien du site](https://louis-gallet.alwaysdata.net)
 - [lien alternatif du site](https://haggstrom.alwaysdata.net)
 
 ## __*__Auteurs :__*__
