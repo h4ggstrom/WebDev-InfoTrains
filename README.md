@@ -7,7 +7,7 @@ Projet de l'UE Développement Web de 4e semestre de licence informatique. Le pri
 
 Dans cette première partie, l'objectif est de prendre en main le concept d'API et d'échanges de flux. Pour cela, Il faudra intégrer au pied de page un lien vers [l'image du jour de la NASA](https://apod.nasa.gov/apod/) à l'aide de l'API apod distribuée par la NASA.
 De plus, on pourra extraire l'IP de l'utilisateur à l'aide du site d'[ipinfo](https://ipinfo.io/), pour lui indiquer une estimation de sa position géographique.
-De même, on utilisera aussi l'api du site [WhatIsMyIp](https://www.whatismyip.com/).
+De même, on pourra aussi utiliser l'API du site [WhatIsMyIp](https://www.whatismyip.com/).
 
 ## __*__Partie 2 : Horaires de trains et informations en gare__*__
 
